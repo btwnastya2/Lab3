@@ -11,6 +11,7 @@
 - [Выбор структуры данных](#2-выбор-структуры-данных)
 - [Алгоритм](#3-алгоритм)
 - [Программа](#4-программа)
+- [Анализ правильности решения](#5-анализ-правильности-решения)
 ### 1. Постановка задачи
 >Необходимо написать программу Гостиница, со следющим функционалом
 - Создание гостиницы
@@ -397,7 +398,131 @@ public class manage extends Hotel{
 
 }
 ```
+##### class Test
+```java
+package org.example;
 
+public class Test {
+    public static void main(String[] args) {
+        manage hotel = new manage(5);
+        hotel.Rooms();
+        Guest g1 = new Guest("Vasya");
+        Guest g2 = new Guest("Petya");
+        hotel.checkInOne(g1);
+        hotel.checkInOne(g2,3);
+        Guest [] group1 = new Guest[4];
+        Guest a1 = new Guest("Lera");
+        Guest a2 = new Guest("Katya");
+        Guest a3 = new Guest("Tolya");
+        Guest a4 = new Guest("Ben");
+        group1[0] = a1;
+        group1[1] = a2;
+        group1[2] = a3;
+        group1[3] = a4;
+        hotel.checkInGroup(group1);
+        hotel.Rooms();
+        hotel.checkOutOne(1);
+        hotel.checkOutOne(2);
+        hotel.checkOutOne(3);
+        hotel.checkOutOne(4);
+        hotel.checkOutOne(5);
+        Family a = new Family(3, "Ivanov");
+        hotel.checkInFam(a);
+        Family p = new Family(3,"Smirnov");
+        hotel.checkInFam(p);
+        hotel.checkOut("Ivanov");
+        hotel.checkOut("Smirnov");
+        hotel.Rooms();
+        hotel.checkInOneWithPets(g1,3);
+        hotel.checkOut("Vasya");
+        hotel.Rooms();
+        hotel.checkInFamWithPets(p,2);
+        hotel.Rooms();
+        hotel.checkInOneWithPets(g2,3);
+        hotel.checkOutOne(1);
+        hotel.checkOutOne(2);
+        hotel.checkOutOne(3);
+        hotel.checkOutOne(4);
+        hotel.checkOutOne(5);
+        hotel.checkInGroupWithPets(group1);
+        hotel.checkOutOne(1);
+        hotel.checkOutOne(2);
+        hotel.checkOutOne(3);
+        hotel.checkOutOne(4);
+        hotel.checkOutOne(5);
+        hotel.checkInGroupTYT(group1,3);
+        hotel.checkOutOne(1);
+    }
+}
+```
+
+#### 5. Анализ правильности решений
+1.  manage hotel = new manage(5);
+        hotel.Rooms();
+  > Итог:
+   Свободные номера: (1; 2; 3; 4; 5; ); Занятые номера: ()
+   >Конструктор создает гостиницу с 5 номерами, метод возвращает два списка свободные номера и занятые.
+
+2.   Guest g1 = new Guest("Vasya");
+        Guest g2 = new Guest("Petya");
+        hotel.checkInOne(g1);
+        hotel.checkInOne(g2,3);
+     >Итог:
+     Vasya Заселен
+     Petya Заселен
+     >Создаем двух гостей. Одного заселяем в первый свободный номер, программа возвращает имя гостя и статус заселения.
+     Второго пробуем заселить в свободный номер первый, такой нномер нашелся, поэтому программа возвращает имя гостя и статус "заселен"ю
+
+3.   Guest [] group1 = new Guest[4];
+        Guest a1 = new Guest("Lera");
+        Guest a2 = new Guest("Katya");
+        Guest a3 = new Guest("Tolya");
+        Guest a4 = new Guest("Ben");
+        group1[0] = a1;
+        group1[1] = a2;
+        group1[2] = a3;
+        group1[3] = a4;
+        hotel.checkInGroup(group1);
+        hotel.Rooms();
+     >Итог:
+     >3
+     >Свободные номера: (); Занятые номера: (1--Vasya; 2--Lera; 3--Petya; 4--Katya; 5--Tolya; )
+     >Создаем массив гостей, заселяем их в любые свободные номера, программа возвращает число заселенных. Проверяем были ли заселены - да.
+
+4.   hotel.checkOutOne(1);
+        hotel.checkOutOne(2);
+        hotel.checkOutOne(3);
+        hotel.checkOutOne(4);
+        hotel.checkOutOne(5);
+     >Итог:
+     >Программа возвращает список номеров, после данного действия все стали свободны. Метод заменяет имя гостя в массиве на "Свободен".
+     >
+5. Family a = new Family(3, "Ivanov");
+        hotel.checkInFam(a);
+        Family p = new Family(3,"Smirnov");
+        hotel.checkInFam(p);
+        hotel.checkOut("Ivanov");
+        hotel.checkOut("Smirnov");
+        hotel.Rooms();
+        hotel.checkInOneWithPets(g1,3);
+   >Итог:true
+   >false
+   >Свободные номера: (1; 2; 3; 4; 5; ); Занятые номера: ()
+   >В случае просто заселения семьи, метод есть ли подряд свободных номеров, столько сколько членов семьи, если есть заселяет и возвращает true, если нет -
+   >возвращает false
+   >В случае заселении семьи с животными, ищет подряд свободных номеров столько сколько членов семьи, причем, чтобы четных было столько, стоклько животных,если есть заселяет и возвращает true, если нет -
+   >возвращает false
+
+6. hotel.checkInOneWithPets(g2,3);
+   >Итог:
+   >Если  номер свободен и является четным, заселяет человека, если нет - возвращает имя и "Не заселен", в данном случае номер нечетный
+7. hotel.checkInGroupWithPets(group1);
+   >Итог: заселяет людей в четные номера, считается, что у каждого в группе есть животное. Возвращает число заселенных.
+8. hotel.checkInGroupTYT(group1,3);
+   >Итог: заселяет гостей в свободные номера, начиная с этого номера, если номер свободен. Возвращает количество заселенных.
+     
+     
+   
 
 
 
